@@ -1,8 +1,8 @@
-redis-data/
+redis-data
 *.env
-__pycache__/
+__pycache__
 .vscode
-fvenv/
+fvenv
 test.db
-*.key
-*.crt
+**.key
+**.crt
