@@ -3,7 +3,14 @@
 ```
 REDIS_SERVER=redis-server
 REDIS_PASS=pass123
+DB_HOST=psql-db
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=pass123
+DB_NAME=fadb
 ```
+## Database initialization is pefrormed with the ``psql_dump`` file.
+
 ## run the docker compose
 ``docker-compose up --build``
 
