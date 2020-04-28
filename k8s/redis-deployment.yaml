@@ -18,3 +18,10 @@ spec:
           command: ["redis-server","--requirepass","pass123","--appendonly","yes"]
           ports:
             - containerPort: 6379
+          volumeMounts:
+            - name: redisdata
+              mountPath: /data
+      volumes:
+        - name: redisdata
+          persistentVolumeClaim:
+            claimName: redisdata
