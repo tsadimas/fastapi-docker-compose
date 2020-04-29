@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
         - name: fastapi
-          image: 'tsadimas/myfastapi'
+          image: 'tsadimas/myfastapi:db'
           ports:
             - containerPort: 8000 
           envFrom:
             - configMapRef:
-                name: fastapi-config
+                name: fastapi-config-db
