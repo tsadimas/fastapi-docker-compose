@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: fastapi-ingress-ssl
+spec:
+  rules:
+  - host: tsadimas.eu
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: fastapi-clip 
+          servicePort: 8000
+  tls:
+    - hosts: 
+      - tsadimas.eu
+      secretName: tls-secret

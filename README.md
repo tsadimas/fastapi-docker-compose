@@ -30,3 +30,24 @@ nginx:
       - ./nginx.https.config:/etc/nginx/nginx.conf
       - ./certs:/etc/nginx/certs
 ```
+
+# K8S
+
+## create a self signed certificate with your domain (e.g. tsadimas.eu)
+```
+openssl req -x509 -newkey rsa:4096 -keyout server.key -out server.crt -days 365 --nodes -subj '/C=GR/O=fidemporiki/OU=it/CN=tsadimas.eu'i
+openssl x509 -in server.crt -out server-crt.pem -outform PEM
+openssl rsa -in server.key -out server-key.pem -outform PEM
+ ```
+## create a tls secret
+```
+kubectl create secret tls tls-secret --cert server-crt.pem --key server-key.pem
+```
+### apply the specific ingress with tls
+```
+kubectl apply -f k8s/fastapi-ingress-ssl.yaml
+```
+NOTE: because it is self signed certificate add the following to /etc/hosts
+```
+127.0.0.1 tsadimas.eu
+```
