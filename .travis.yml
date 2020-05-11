@@ -8,8 +8,11 @@ services:
 
 before_install:
   - docker build -t tsadimas/myfastapi:db_ci .
+  - docker run --rm --net=host -d redis redis-server --requirepass pass123
+  - docker run --rm -e POSTGRES_PASSWORD=pass123 -d --net=host -v pgdata:/var/lib/postgresql/data  postgres
 script:
   - docker images tsadimas/myfastapi:db_ci
+  - docker run --env-file=.env --net=host tsadimas/myfastapi:db_ci pytest test_main.py
 after_success:
   - if [ "$TRAVIS_BRANCH" == "ci"]; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
