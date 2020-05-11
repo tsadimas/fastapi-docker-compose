@@ -12,7 +12,7 @@ script:
   - docker images tsadimas/myfastapi:db_ci
 after_success:
   - if [ "$TRAVIS_BRANCH" == "ci"]; then
-    docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="DOCKER_PASSWORD";
+    docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     docker push tsadimas/myfastapi:db_ci;
     fi
 
