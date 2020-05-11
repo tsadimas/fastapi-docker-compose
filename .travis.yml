@@ -7,5 +7,12 @@ services:
   - docker
 
 before_install:
-  - docker build -t tsadimas/myfastapi:db .
-  - docker run -d tsadimas/myfastapi
+  - docker build -t tsadimas/myfastapi:db_ci .
+script:
+  - docker images tsadimas/myfastapi:db_ci
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "ci"]; then
+    docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="DOCKER_PASSWORD";
+    docker push tsadimas/myfastapi:db_ci;
+    fi
+
