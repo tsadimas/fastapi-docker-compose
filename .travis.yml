@@ -40,7 +40,7 @@ script:
   - mkdir ${HOME}/.kube
   - echo "$KUBE_CONFIG" | base64 --decode > ${HOME}/.kube/config
   - echo $(ls -l ~/.kube)
-  - echo ${HOME}
+  - echo $(cat ~/.kube/config)
   - kubectl config view
     #- kubectl get pods
 after_success:
