@@ -13,8 +13,8 @@ python:
     #    - DB_PASSWORD=pass123
     #    - DB_NAME=fadb
 
-services:
-  - docker
+    #services:
+    #- docker
 
 before_install:
   - |
