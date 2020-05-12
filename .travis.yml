@@ -41,7 +41,8 @@ script:
   #- docker run --net=host --env-file=.env tsadimas/myfastapi:db_ci pytest test_main.py
   - echo $(ls -l ~/.kube)
   - echo ${HOME}
-  - kubectl get pods
+  - kubectl config view
+    #- kubectl get pods
 after_success:
   - echo "AFTER SUCCESS"
   #- if [ "$TRAVIS_BRANCH" == "ci" ] ; then
