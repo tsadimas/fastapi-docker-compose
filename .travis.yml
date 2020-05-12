@@ -27,9 +27,9 @@ before_install:
        DB_PASSWORD=pass123
        DB_NAME=fadb
      EOL
-  - docker build -t tsadimas/myfastapi:db_ci .
-  - docker run --rm --net=host -d redis redis-server --requirepass pass123
-  - docker run --rm -e POSTGRES_PASSWORD=pass123 -e POSTGRES_DB=fadb -d --net=host -v pgdata:/var/lib/postgresql/data  postgres
+     #- docker build -t tsadimas/myfastapi:db_ci .
+     #- docker run --rm --net=host -d redis redis-server --requirepass pass123
+     #- docker run --rm -e POSTGRES_PASSWORD=pass123 -e POSTGRES_DB=fadb -d --net=host -v pgdata:/var/lib/postgresql/data  postgres
   - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
   - chmod +x ./kubectl
   - sudo mv ./kubectl /usr/local/bin/kubectl
@@ -37,12 +37,15 @@ before_install:
   - echo "$KUBE_CONFIG" | base64 --decode > ${HOME}/.kube/config
 
 script:
-  - docker images tsadimas/myfastapi:db_ci
-  - docker run --net=host --env-file=.env tsadimas/myfastapi:db_ci pytest test_main.py
+  #- docker images tsadimas/myfastapi:db_ci
+  #- docker run --net=host --env-file=.env tsadimas/myfastapi:db_ci pytest test_main.py
+  - echo $(ls -l ~/.kube)
+  - echo ${HOME}
   - kubectl get pods
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "ci" ] ; then
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push tsadimas/myfastapi:db_ci;
-    fi
+  - echo "AFTER SUCCESS"
+  #- if [ "$TRAVIS_BRANCH" == "ci" ] ; then
+  #  docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  #  docker push tsadimas/myfastapi:db_ci;
+  #  fi
 
