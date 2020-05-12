@@ -3,16 +3,25 @@ language: python
 python:
   - "3.8"
 
+env:
+  - REDIS_SERVER=localhost
+  - REDIS_PASS=pass123
+  - DB_HOST=localhost
+  - DB_PORT=5432
+  - DB_USER=postgres
+  - DB_PASSWORD=pass123
+  - DB_NAME=fadb
+
 services:
   - docker
 
 before_install:
   - docker build -t tsadimas/myfastapi:db_ci .
   - docker run --rm --net=host -d redis redis-server --requirepass pass123
-  - docker run --rm -e POSTGRES_PASSWORD=pass123 -d --net=host -v pgdata:/var/lib/postgresql/data  postgres
+  - docker run --rm -e POSTGRES_PASSWORD=pass123 -e POSTGRES_DB=fadb -d --net=host -v pgdata:/var/lib/postgresql/data  postgres
 script:
   - docker images tsadimas/myfastapi:db_ci
-  - docker run --env-file=.env --net=host tsadimas/myfastapi:db_ci pytest test_main.py
+  - docker run --net=host tsadimas/myfastapi:db_ci pytest test_main.py
 after_success:
   - if [ "$TRAVIS_BRANCH" == "ci"]; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
