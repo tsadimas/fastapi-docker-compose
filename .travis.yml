@@ -5,7 +5,8 @@ python:
 
 env:
   global:
-    KUBE_CONFIG=YXBpVmVyc2lvbjogdjEKY2x1c3RlcnM6Ci0gY2x1c3RlcjoKICAgIHNlcnZlcjogaHR0cHM6Ly90c2FkaW1hcy5kbnMtY2xvdWQubmV0OjE2NDQzCiAgICBpbnNlY3VyZS1za2lwLXRscy12ZXJpZnk6IHRydWUKICBuYW1lOiBtaWNyb2s4cy1jbHVzdGVyCmNvbnRleHRzOgotIGNvbnRleHQ6CiAgICBjbHVzdGVyOiBtaWNyb2s4cy1jbHVzdGVyCiAgICB1c2VyOiBhZG1pbgogIG5hbWU6IG1pY3JvazhzCmN1cnJlbnQtY29udGV4dDogbWljcm9rOHMKa2luZDogQ29uZmlnCnByZWZlcmVuY2VzOiB7fQp1c2VyczoKLSBuYW1lOiBhZG1pbgogIHVzZXI6CiAgICBwYXNzd29yZDogVFZaSlFWbFhUblF3VWtoWFVFMUpTamxYU1VwMVRucG5kbk40T1RoSmVteDBlVEVyY1ZWU1R6bHdPRDBLCiAgICB1c2VybmFtZTogYWRtaW4K
+    - SHA=$(git rev-parse HEAD)
+    - KUBE_CONFIG=YXBpVmVyc2lvbjogdjEKY2x1c3RlcnM6Ci0gY2x1c3RlcjoKICAgIHNlcnZlcjogaHR0cHM6Ly90c2FkaW1hcy5kbnMtY2xvdWQubmV0OjE2NDQzCiAgICBpbnNlY3VyZS1za2lwLXRscy12ZXJpZnk6IHRydWUKICBuYW1lOiBtaWNyb2s4cy1jbHVzdGVyCmNvbnRleHRzOgotIGNvbnRleHQ6CiAgICBjbHVzdGVyOiBtaWNyb2s4cy1jbHVzdGVyCiAgICB1c2VyOiBhZG1pbgogIG5hbWU6IG1pY3JvazhzCmN1cnJlbnQtY29udGV4dDogbWljcm9rOHMKa2luZDogQ29uZmlnCnByZWZlcmVuY2VzOiB7fQp1c2VyczoKLSBuYW1lOiBhZG1pbgogIHVzZXI6CiAgICBwYXNzd29yZDogVFZaSlFWbFhUblF3VWtoWFVFMUpTamxYU1VwMVRucG5kbk40T1RoSmVteDBlVEVyY1ZWU1R6bHdPRDBLCiAgICB1c2VybmFtZTogYWRtaW4K
     #     - REDIS_SERVER=localhost
     #    - REDIS_PASS=pass123
     #    - DB_HOST=localhost
@@ -28,7 +29,7 @@ before_install:
        DB_PASSWORD=pass123
        DB_NAME=fadb
      EOL
-  - docker build -t tsadimas/myfastapi:db_ci .
+  - docker build -t tsadimas/myfastapi_ci:latest -t tsadimas/myfastapi_ci:$SHA .
   - docker run --rm --net=host -d redis redis-server --requirepass pass123
   - docker run --rm -e POSTGRES_PASSWORD=pass123 -e POSTGRES_DB=fadb -d --net=host -v pgdata:/var/lib/postgresql/data  postgres
   - mkdir ${HOME}/.kube
@@ -39,14 +40,20 @@ before_install:
   - sudo mv ./kubectl /usr/local/bin/kubectl
 
 script:
-  - docker images tsadimas/myfastapi:db_ci
-  - docker run --net=host --env-file=.env tsadimas/myfastapi:db_ci pytest test_main.py
+  - docker images tsadimas/myfastapi_ci:$SHA
+  - docker run --net=host --env-file=.env tsadimas/myfastapi_ci:$SHA pytest test_main.py
   - kubectl config view
   - kubectl get pods
 after_success:
   - echo "AFTER SUCCESS"
   - if [ "$TRAVIS_BRANCH" == "ci" ] ; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push tsadimas/myfastapi:db_ci;
+    docker push tsadimas/myfastapi_ci:latest;
+    docker push tsadimas/myfastapi_ci:$SHA;
+    kubectl apply -f k8s;
+    kubectl set image deployments/fastapi-deployment fastapi=tsadimas/myfastapi_ci:$SHA;
     fi
-
+    #deploy:
+    #  on:
+    #    branch: ci
+    #
