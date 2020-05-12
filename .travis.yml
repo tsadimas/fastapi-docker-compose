@@ -33,6 +33,7 @@ before_install:
   - docker run --rm -e POSTGRES_PASSWORD=pass123 -e POSTGRES_DB=fadb -d --net=host -v pgdata:/var/lib/postgresql/data  postgres
   - mkdir ${HOME}/.kube
   - echo "$KUBE_CONFIG" | base64 --decode > ${HOME}/.kube/config
+  #- openssl aes-256-cbc -K $encrypted_37b7d4a5d270_key -iv $encrypted_37b7d4a5e/config.tsadimas -d
   - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
   - chmod +x ./kubectl
   - sudo mv ./kubectl /usr/local/bin/kubectl
