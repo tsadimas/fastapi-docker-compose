@@ -28,49 +28,24 @@ before_install:
        DB_PASSWORD=pass123
        DB_NAME=fadb
      EOL
-     #- docker build -t tsadimas/myfastapi:db_ci .
-     #- docker run --rm --net=host -d redis redis-server --requirepass pass123
-     #- docker run --rm -e POSTGRES_PASSWORD=pass123 -e POSTGRES_DB=fadb -d --net=host -v pgdata:/var/lib/postgresql/data  postgres
-     #- curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+  - docker build -t tsadimas/myfastapi:db_ci .
+  - docker run --rm --net=host -d redis redis-server --requirepass pass123
+  - docker run --rm -e POSTGRES_PASSWORD=pass123 -e POSTGRES_DB=fadb -d --net=host -v pgdata:/var/lib/postgresql/data  postgres
   - mkdir ${HOME}/.kube
   - echo "$KUBE_CONFIG" | base64 --decode > ${HOME}/.kube/config
-    #- | 
-    #  cat <<EOL > ${HOME}/.kube/config
-    #    apiVersion: v1
-    #    clusters:
-    #    - cluster:
-    #        server: https://tsadimas.dns-cloud.net:16443
-    #        insecure-skip-tls-verify: true
-    #      name: microk8s-cluster
-    #    contexts:
-    #    - context:
-    #        cluster: microk8s-cluster
-    #        user: admin
-    #      name: microk8s
-    #    current-context: microk8s
-    #    kind: Config
-    #    preferences: {}
-    #    users:
-    #    - name: admin
-    #      user:
-    #        password: TVZJQVlXTnQwUkhXUE1JSjlXSUp1TnpndnN4OThJemx0eTErcVVSTzlwOD0K
-    #        username: admin
-    #  EOL
-  - curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
+  - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
   - chmod +x ./kubectl
   - sudo mv ./kubectl /usr/local/bin/kubectl
 
 script:
-  #- docker images tsadimas/myfastapi:db_ci
-  #- docker run --net=host --env-file=.env tsadimas/myfastapi:db_ci pytest test_main.py
-  - echo $(ls -l ~/.kube)
-  - echo $(cat ~/.kube/config)
+  - docker images tsadimas/myfastapi:db_ci
+  - docker run --net=host --env-file=.env tsadimas/myfastapi:db_ci pytest test_main.py
   - kubectl config view
-    #- kubectl get pods
+  - kubectl get pods
 after_success:
   - echo "AFTER SUCCESS"
-  #- if [ "$TRAVIS_BRANCH" == "ci" ] ; then
-  #  docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-  #  docker push tsadimas/myfastapi:db_ci;
-  #  fi
+  - if [ "$TRAVIS_BRANCH" == "ci" ] ; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push tsadimas/myfastapi:db_ci;
+    fi
 
