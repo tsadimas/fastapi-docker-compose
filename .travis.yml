@@ -34,7 +34,7 @@ script:
   - docker images tsadimas/myfastapi:db_ci
   - docker run --net=host --env-file=.env tsadimas/myfastapi:db_ci pytest test_main.py
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "ci"]; then
+  - if [ "$TRAVIS_BRANCH" == "ci" ] ; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     docker push tsadimas/myfastapi:db_ci;
     fi
