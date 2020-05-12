@@ -41,7 +41,7 @@ install:
 script:
   - docker images tsadimas/myfastapi:db_ci
   - docker run --net=host --env-file=.env tsadimas/myfastapi:db_ci pytest test_main.py
-  - kubectl get pods
+  - kubectl --insecure-skip-tls-verify=true get pods
 after_success:
   - if [ "$TRAVIS_BRANCH" == "ci" ] ; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
