@@ -4,13 +4,14 @@ python:
   - "3.8"
 
 env:
-  - REDIS_SERVER=localhost
-  - REDIS_PASS=pass123
-  - DB_HOST=localhost
-  - DB_PORT=5432
-  - DB_USER=postgres
-  - DB_PASSWORD=pass123
-  - DB_NAME=fadb
+  global:
+    - REDIS_SERVER=localhost
+    - REDIS_PASS=pass123
+    - DB_HOST=localhost
+    - DB_PORT=5432
+    - DB_USER=postgres
+    - DB_PASSWORD=pass123
+    - DB_NAME=fadb
 
 services:
   - docker
