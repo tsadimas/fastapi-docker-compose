@@ -54,6 +54,8 @@ after_success:
     kubectl set image deployments/fastapi-deployment fastapi=tsadimas/myfastapi_ci:$SHA;
     fi
     #deploy:
+    #  provider: script
+    #  script: bash ./deploy.sh
     #  on:
     #    branch: ci
-    #
+    
