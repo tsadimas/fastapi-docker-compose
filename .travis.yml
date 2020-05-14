@@ -1,25 +1,20 @@
 language: python
-
 python:
-  - "3.8"
-
+- '3.8'
 branches:
   only:
-    - master
-    - ci
-
+  - master
+  - ci
 env:
   global:
-    - REDIS_SERVER=localhost
-    - REDIS_PASS=pass123
-
+  - REDIS_SERVER=localhost
+  - REDIS_PASS=pass123
+  - secure: epOfC4rRXO8Yi/yh3vqCHWq+WRfLKXNwigMnBJ1pu2yL+rgatOGHAJuJYjGSKNJkjxMKSK/BWFs6Kp3TZVK3WLYLZmPEPN1WnSdjY01hNmeD1DlvRXGEhUs6JjVcMFmeWJpBZPn28C1X+ld1dPmQK+hb04yBp26UNMLnqD93ghroVFcwG8X88bqoL/pUbuoTzJ2KCtE5Gfh8m569bX+8A75poFxhUFlUyuEI8H4DTlbz+D5vhVPkAE8wpQmuaqFYEjvxDCgFTsri46Pqfk1dXN9+RIn6iyKyqe9BfZ9ICJUeTe5YFTu7fuSuNUi+7yH++PVkukgUdfjUi4l7/yvyFs3MTt0LmJzAx5H32JVmr6+5v0uymBzyBphyfK0hoVWnVa6mEfTR53H1jAANDzeFioEcOPSSPQ6IkUtSTpgRITh4TVyyzGTPFJdofO8b5kZfchRjBXhFf6BO1iGcdalCpO90e8ZWNVWA1yMWWxX0GWC+LpJ0nLvnZ2ayVFZb7xFQEUBox4bQLWlMSOeUe2JictFTSYArtgPX0qepP9MvhyptjfFEuWrpVOeHocxErAvN/7EZBBPNocAgMwlwjrfsfiT4wUtF26Z66U2W18+GVsxcFLv+CoQy5aO8uS7ngwf9qWjR52pr4p9pJ8LXAisVLEVz3YzfkZCciMFfVzSi4v0=
 services:
-  - docker
-
+- docker
 before_install:
-  - docker build -t tsadimas/myfastapi . 
-  - docker run --rm --net=host -d redis redis-server --requirepass pass123
+- docker build -t tsadimas/myfastapi .
+- docker run --rm --net=host -d redis redis-server --requirepass pass123
 script:
-  - docker run --net=host --env-file=.env tsadimas/myfastapi pytest test_main.py
-  - echo "DONE" 
-
+- docker run --net=host --env-file=.env tsadimas/myfastapi pytest test_main.py
+- echo "DONE"
