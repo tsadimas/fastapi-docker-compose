@@ -1,9 +1,18 @@
+# Test
+``dotenv -f .env run pytest app/test_main.py``
+
+
 # how to run
 ## create a .env file in root directory adding these values
 ```
 REDIS_SERVER=redis-server
 REDIS_PASS=pass123
 ```
+## Run without docker
+``dotenv -f .env run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000``
+but need a local redis running
+
+
 ## run the docker compose
 ``docker-compose up --build``
 
