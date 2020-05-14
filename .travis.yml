@@ -16,5 +16,5 @@ before_install:
 - docker build -t tsadimas/myfastapi .
 - docker run --rm --net=host -d redis redis-server --requirepass pass123
 script:
-- docker run --net=host --env-file=.env tsadimas/myfastapi pytest test_main.py
+- docker run --net=host tsadimas/myfastapi pytest test_main.py
 - echo "DONE"
