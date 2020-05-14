@@ -16,7 +16,7 @@ before_install:
   - |
     cat <<EOF > .env
        REDIS_SERVER=$(echo $REDIS_SERVER)
-       REDIS_PASS=$(cat $REDIS_PASS)
+       REDIS_PASS=$(echo $REDIS_PASS)
      EOF
   - docker build -t tsadimas/myfastapi .
   - docker run --rm --net=host -d redis redis-server --requirepass pass123
