@@ -1,5 +1,5 @@
 # Test
-``dotenv -f .env run pytest app/test_main.py``
+``dotenv -f .env run pytest app/tests/test_main.py``
 
 
 # how to run
