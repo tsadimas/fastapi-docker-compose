@@ -30,9 +30,9 @@ stages:
     - task: Docker@2
       displayName: Push image
       inputs:
-        containerRegistry: |
-          $(tsadimas-docker-hub)
+        containerRegistry: tsadimas-docker-hub
         repository: $(imageName)
+        #dockerRegistryEndpoint: tsadimas-docker-hub
         command: push
         tags: |
           test1
